@@ -269,7 +269,7 @@ class FormHelperTest < ActionView::TestCase
       hidden_field("post", "title")
   end
 
-  def test_text_field_with_options
+  def test_hidden_field_with_options
     assert_dom_equal '<input id="post_title" name="post[title]" type="hidden" value="Something Else" />',
       hidden_field("post", "title", :value => "Something Else")
   end

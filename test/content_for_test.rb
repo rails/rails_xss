@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class UrlHelperTest < ActionView::TestCase
+class ContentForTest < ActionView::TestCase
 
   def test_content_for_should_yield_html_safe_string
     content_for(:testing, "Some <p>html</p>")
