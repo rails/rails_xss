@@ -79,6 +79,16 @@ module ActionView
         end
       end
     end
+    
+    module JavaScriptHelper
+      def escape_javascript(javascript)
+        if javascript
+          javascript.gsub(/(\\|<\/|\r\n|[\n\r"'])/) {|match| JS_ESCAPE_MAP[match] }
+        else
+          ''
+        end
+      end
+    end
   end
 end
 
