@@ -79,6 +79,50 @@ module ActionView
         end
       end
     end
+    
+    module TranslationHelper
+      HTML_SAFE_TRANSLATION_KEY_RE = /(\b|_|\.)html$/
+      ESCAPE_INTERPOLATIONS_RESERVED_KEYS = I18n::Backend::Base::RESERVED_KEYS + [:locale, :raise, :cascade]
+
+      # Replace translate to escape any interpolations when using keys ending
+      # with html. We don't use method chaining because it can't cover edge cases
+      # involving multiple keys.
+      #
+      # @see https://groups.google.com/group/rubyonrails-security/browse_thread/thread/2b61d70fb73c7cc5
+      def translate(keys, options = {})
+        if multiple_keys = keys.is_a?(Array)
+          ActiveSupport::Deprecation.warn "Giving an array to translate is deprecated, please give a symbol or a string instead", caller
+        end
+
+        options[:raise] = true
+        keys = scope_keys_by_partial(keys)
+        html_safe_options = nil
+        
+        translations = keys.map do |key|
+          if key.to_s =~ HTML_SAFE_TRANSLATION_KEY_RE
+            unless html_safe_options
+              html_safe_options = options.dup
+              options.except(*ESCAPE_INTERPOLATIONS_RESERVED_KEYS).each do |name, value|
+                html_safe_options[name] = ERB::Util.html_escape(value.to_s)
+              end
+            end
+            I18n.translate(key, html_safe_options).html_safe
+          else
+            I18n.translate(key, options)
+          end
+        end
+
+        if multiple_keys || translations.size > 1
+          translations
+        else
+          translations.first
+        end
+      rescue I18n::MissingTranslationData => e
+        keys = I18n.send(:normalize_translation_keys, e.locale, e.key, e.options[:scope])
+        content_tag('span', keys.join(', '), :class => 'translation_missing')
+      end
+      alias :t :translate
+    end
   end
 end
 
