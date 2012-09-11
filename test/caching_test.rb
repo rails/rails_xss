@@ -1,4 +1,4 @@
-require 'test_helper'
+require File.expand_path('../test_helper', __FILE__)
 
 CACHE_DIR = 'test_cache'
 # Don't change '/../temp/' cavalierly or you might hose something you don't want hosed

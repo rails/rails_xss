@@ -1,4 +1,4 @@
-require 'test_helper'
+require File.expand_path('../test_helper', __FILE__)
 
 class JavascriptHelperTest < ActionView::TestCase
   def test_escape_javascript_with_safebuffer
