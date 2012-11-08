@@ -33,9 +33,9 @@ module ActionView
         output_buffer.concat(string)
       end
 
-      def simple_format(text, html_options={})
+      def simple_format(text, html_options={}, options={:sanitize => true})
         start_tag = tag('p', html_options, true)
-        text = ERB::Util.h(text).to_str.dup
+        text = options[:sanitize] ? ERB::Util.h(text).to_str.dup : text.to_str.dup
         text.gsub!(/\r\n?/, "\n")                    # \r\n and \r -> \n
         text.gsub!(/\n\n+/, "</p>\n\n#{start_tag}")  # 2+ newline  -> paragraph
         text.gsub!(/([^\n]\n)(?=[^\n])/, '\1<br />') # 1 newline   -> br
