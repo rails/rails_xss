@@ -65,12 +65,12 @@ Both these methods support arbitrary HTML and are *not* safe to embed directly i
     
 simple_format has been patched to behave like the Rails 3 method, which supports an options hash with a 'sanitize' flag, eg:
 
-simple_format(text, html_options={}, options={})
+	simple_format(text, html_options={}, options={})
 
 The sanitize flag defaults to true, but if passed as false, the text will not be sanitized, eg:
 
-simple_format("<script>potentially evil js</script>", {}, { :sanitize => false })
-=> "<p><script>potentially evil js</script></p>"
+	simple_format("<script>potentially evil js</script>", {}, { :sanitize => false })
+	=> "<p><script>potentially evil js</script></p>"
 
 #### Safe strings aren't magic.
 
