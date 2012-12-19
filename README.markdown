@@ -28,13 +28,14 @@ With this plugin installed, the html will be escaped.  So you will need to do on
       end.join("\n").html_safe
     end
   
-3) Use the safe_helper meta programming method:
+3) Use the `safe_helper` meta programming method (WARNING: This is not supported by Rails 3, so if you're planning to
+eventually upgrade your app this alternative is not recommended):
 
     module ApplicationHelper
       def some_helper
         #...
       end
-      safe_helper :some_helper
+      safe_helper :some_helper    # not supported by Rails 3
     end  
 
 Example
