@@ -1,4 +1,4 @@
-require 'test_helper'
+require File.expand_path('../test_helper', __FILE__)
 
 class SafeBufferTest < ActiveSupport::TestCase
   def setup
@@ -43,9 +43,10 @@ class SafeBufferTest < ActiveSupport::TestCase
     assert !@buffer.sub('', "asdf").html_safe?
   end
   
-  test "Should raise argument error when using sub!" do
-    assert_raise TypeError do
-      @buffer.sub!('', "asdf")
-    end
+  test "mark as unsafe when using sub!" do
+    assert_equal true, @buffer.html_safe?
+    @buffer.sub!('', "asdf")
+    assert_equal false, @buffer.html_safe?
+    assert_equal "asdf", @buffer
   end
 end
