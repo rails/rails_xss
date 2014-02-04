@@ -24,6 +24,11 @@ class TextHelperTest < ActionView::TestCase
                      simple_format('This is <script>evil_js</script>.'))
   end
 
+  def test_simple_format_should_not_escape_unsafe_content_when_sanitize_option_unset
+    assert_dom_equal(%(<p>This is <script>potentially_evil_js</script>.</p>),
+                     simple_format('This is <script>potentially_evil_js</script>.', {}, { :sanitize => false })
+  end
+
   def test_truncate_should_not_be_html_safe
     assert !truncate("Hello World!", :length => 12).html_safe?
   end
